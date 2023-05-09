@@ -13,16 +13,31 @@ export default class App extends Component {
     isLoading: false,
     error: null,
     showModal: false,
+    selectedImage: null,
+    alt: null,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState);
+    if (prevState.imageName !== this.state.imageName) {
+      this.setState({ hits: [], page: 1 }, () => {
+        this.fetchImages();
+      });
+    }
+  }
 
   handleFormSubmit = imageName => {
     this.setState({ imageName });
   };
-  toggleModal = () => {
+
+  toggleModal = (largeImage, alt) => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
+      selectedImage: largeImage,
+      alt,
     }));
   };
+
   fetchImages = () => {
     const { imageName, page } = this.state;
     this.setState({ isLoading: true });
@@ -37,7 +52,6 @@ export default class App extends Component {
       })
       .then(data => {
         const newHits = data.hits;
-        console.log('newHits', newHits);
         if (newHits.length === 0) {
           this.setState({ isLoading: false });
           return;
@@ -53,23 +67,26 @@ export default class App extends Component {
         console.error('Error:', error);
       });
   };
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevState);
-    if (prevState.imageName !== this.state.imageName) {
-      this.setState({ hits: [], page: 1 }, () => {
-        this.fetchImages();
-      });
-    }
-  }
+
   render() {
-    const { hits, isLoading, showModal } = this.state;
+    const { hits, isLoading, showModal, selectedImage, alt } = this.state;
     return (
       <>
         <ToastContainer />
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery hits={hits} isLoading={isLoading} />
+        <ImageGallery
+          hits={hits}
+          isLoading={isLoading}
+          toggleModal={this.toggleModal}
+        />
 
-        {showModal && <Modal />}
+        {showModal && (
+          <Modal
+            onClose={this.toggleModal}
+            largeImage={selectedImage}
+            alt={alt}
+          />
+        )}
 
         {isLoading && <Loader />}
         {!isLoading && hits.length >= 12 && (

@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {
-  Form,
-  FormBtn,
-  FormBtnLabel,
-  FormInput,
-  Header,
-} from './Searchbar.styled';
+import { Form, FormBtn, FormInput, Header } from './Searchbar.styled';
 
 export default class Searchbar extends Component {
   state = {
@@ -42,7 +36,7 @@ export default class Searchbar extends Component {
         <Header className="searchbar">
           <Form className="form" onSubmit={this.handleFormSubmit}>
             <FormBtn type="submit" className="button">
-              <FormBtnLabel className="button-label">Search</FormBtnLabel>
+              Click Me
             </FormBtn>
 
             <FormInput

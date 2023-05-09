@@ -2,8 +2,7 @@ import React from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import { List } from './ImageGallery.styled';
 
-export default function ImageGallery({ hits }) {
-  console.log(hits);
+export default function ImageGallery({ hits, toggleModal }) {
   return (
     <>
       <List className="gallery">
@@ -13,6 +12,7 @@ export default function ImageGallery({ hits }) {
             id={hit.id}
             previewImg={hit.webformatURL}
             tags={hit.tags}
+            toggleModal={() => toggleModal(hit.largeImageURL, hit.tags)}
           />
         ))}
       </List>
